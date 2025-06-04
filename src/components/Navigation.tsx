@@ -112,7 +112,7 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
       <div className="md:hidden">
         {/* Mobile Top Bar */}
         <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm sticky top-0 z-50">
-          <div className="px-4 py-3">
+          <div className="px-4 py-3 max-w-md mx-auto">
             <div className="flex items-center justify-between">
               <Link to="/" className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-xl flex items-center justify-center">
@@ -142,7 +142,7 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
 
         {/* Mobile Bottom Navigation */}
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
-          <div className="grid grid-cols-4 h-16">
+          <div className="max-w-md mx-auto grid grid-cols-4 h-16">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
