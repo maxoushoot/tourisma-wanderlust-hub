@@ -97,12 +97,15 @@ const Index = () => {
               </span>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Catégories</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</a>
-              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
-                Partager un lieu
-              </Button>
+              <a href="/" className="text-blue-600 font-medium">Accueil</a>
+              <a href="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</a>
+              <a href="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</a>
+              <a href="/profile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Profil</a>
+              <a href="/share">
+                <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                  Partager un lieu
+                </Button>
+              </a>
             </nav>
           </div>
         </div>
