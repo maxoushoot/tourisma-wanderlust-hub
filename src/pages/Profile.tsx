@@ -55,7 +55,7 @@ const Profile = () => {
     }
   ];
 
-  const favoriteePlaces = [
+  const favoritePlaces = [
     {
       id: '4',
       name: 'Mont-Saint-Michel',
@@ -214,7 +214,7 @@ const Profile = () => {
 
           <TabsContent value="favorites" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favoriteePlaces.map((place) => (
+              {favoritePlaces.map((place) => (
                 <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                   <div className="relative">
                     <img 
