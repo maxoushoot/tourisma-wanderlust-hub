@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { MapPin, Star, Heart, Share2, Camera, Clock, Euro, Users, ArrowLeft } from 'lucide-react';
+import { MapPin, Star, Camera, Clock, Euro, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Navigation from '@/components/Navigation';
 
 const PlaceDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -67,29 +68,7 @@ const PlaceDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" className="flex items-center space-x-2">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Retour</span>
-            </Button>
-            <div className="flex items-center space-x-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => setIsFavorite(!isFavorite)}
-                className={isFavorite ? 'text-red-500' : ''}
-              >
-                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Share2 className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       {/* Image Gallery */}
       <div className="relative h-96 overflow-hidden">

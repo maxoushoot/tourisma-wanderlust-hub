@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Navigation from "@/components/Navigation";
 
 const Index = () => {
   const featuredPlaces = [
@@ -85,31 +86,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-blue-100 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                Tourisma
-              </span>
-            </div>
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-blue-600 font-medium">Accueil</a>
-              <a href="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</a>
-              <a href="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</a>
-              <a href="/profile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Profil</a>
-              <a href="/share">
-                <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
-                  Partager un lieu
-                </Button>
-              </a>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Navigation transparent />
 
       {/* Hero Section */}
       <section className="relative py-20 px-4">

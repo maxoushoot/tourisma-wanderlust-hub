@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, MapPin, Plus, X } from 'lucide-react';
+import { Upload, MapPin, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import Navigation from '@/components/Navigation';
 
 const SharePlace = () => {
   const [formData, setFormData] = useState({
@@ -60,24 +61,7 @@ const SharePlace = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" className="flex items-center space-x-2">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Retour</span>
-            </Button>
-            <h1 className="text-xl font-semibold">Partager un lieu</h1>
-            <Button 
-              form="share-place-form"
-              type="submit"
-              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
-            >
-              Publier
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <form id="share-place-form" onSubmit={handleSubmit} className="space-y-6">

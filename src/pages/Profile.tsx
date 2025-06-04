@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Navigation from '@/components/Navigation';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState('places');
@@ -91,6 +92,9 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <Navigation transparent />
+
       {/* Cover Image */}
       <div className="relative h-64 md:h-80 overflow-hidden">
         <img 
