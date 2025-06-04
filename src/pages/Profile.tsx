@@ -1,271 +1,393 @@
 
 import React, { useState } from 'react';
-import { MapPin, Camera, Settings, Heart, Users, Star, Edit } from 'lucide-react';
+import { Settings, MapPin, Heart, Star, Camera, Edit3, Share2, Calendar, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import Navigation from '@/components/Navigation';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState('places');
-
-  const user = {
-    id: '1',
+  const [isEditing, setIsEditing] = useState(false);
+  const [userInfo, setUserInfo] = useState({
     name: 'Marie Dubois',
-    bio: 'Passionnée de voyages et de découvertes. J\'adore partager mes trouvailles avec la communauté Tourisma !',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b9e77fa5?w=200&h=200&fit=crop&crop=face',
-    coverImage: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=400&fit=crop',
-    location: 'Lyon, France',
-    joinedAt: 'Mars 2023',
-    placesShared: 25,
-    followers: 1250,
-    following: 480,
-    totalLikes: 3420,
-    badge: 'Exploratrice Expert',
-    badgeColor: 'bg-yellow-100 text-yellow-800'
+    bio: 'Passionnée de voyage et exploratrice dans l\'âme. J\'adore découvrir des lieux authentiques et partager mes coups de cœur avec la communauté.',
+    location: 'Paris, France',
+    joinDate: 'Membre depuis Mars 2023'
+  });
+
+  const stats = {
+    placesShared: 42,
+    likes: 324,
+    followers: 156,
+    following: 89,
+    reviews: 87,
+    events: 12
   };
 
   const userPlaces = [
     {
-      id: '1',
-      name: 'Château de Chambord',
-      image: 'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=300&h=200&fit=crop',
-      category: 'Histoire',
+      id: 1,
+      name: "Château de Versailles",
+      location: "Versailles, France",
+      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=400&h=300&fit=crop",
       rating: 4.8,
-      likes: 156,
-      views: 1240
+      likes: 45,
+      category: "Histoire",
+      dateAdded: "Il y a 2 semaines"
     },
     {
-      id: '2',
-      name: 'Gorges du Verdon',
-      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=200&fit=crop',
-      category: 'Nature',
+      id: 2,
+      name: "Lac de montagne",
+      location: "Alpes, France",
+      image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop",
       rating: 4.9,
-      likes: 203,
-      views: 1890
+      likes: 38,
+      category: "Nature",
+      dateAdded: "Il y a 1 mois"
     },
     {
-      id: '3',
-      name: 'Village de Rocamadour',
-      image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=300&h=200&fit=crop',
-      category: 'Histoire',
+      id: 3,
+      name: "Village perché",
+      location: "Provence, France",
+      image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&h=300&fit=crop",
       rating: 4.7,
-      likes: 98,
-      views: 760
+      likes: 52,
+      category: "Culture",
+      dateAdded: "Il y a 1 mois"
     }
   ];
 
-  const favoriteePlaces = [
+  const likedPlaces = [
     {
-      id: '4',
-      name: 'Mont-Saint-Michel',
-      image: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=300&h=200&fit=crop',
-      category: 'Histoire',
-      addedBy: 'Thomas Martin'
+      id: 4,
+      name: "Pont mystique",
+      location: "Forêt enchantée",
+      image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=300&fit=crop",
+      rating: 4.7,
+      author: "Thomas Martin"
     },
     {
-      id: '5',
-      name: 'Calanques de Marseille',
-      image: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=300&h=200&fit=crop',
-      category: 'Nature',
-      addedBy: 'Sophie Laurent'
+      id: 5,
+      name: "Plage paradisiaque",
+      location: "Côte d'Azur",
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+      rating: 4.8,
+      author: "Sophie Laurent"
     }
   ];
 
-  const followers = [
-    {
-      id: '1',
-      name: 'Thomas Martin',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-      placesShared: 18,
-      isFollowing: false
-    },
-    {
-      id: '2',
-      name: 'Sophie Laurent',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
-      placesShared: 22,
-      isFollowing: true
-    }
+  const achievements = [
+    { name: "Premier partage", icon: "🎯", description: "Votre premier lieu partagé", unlocked: true },
+    { name: "Explorateur", icon: "🗺️", description: "10 lieux partagés", unlocked: true },
+    { name: "Passionné", icon: "❤️", description: "50 likes reçus", unlocked: true },
+    { name: "Influenceur", icon: "⭐", description: "100 abonnés", unlocked: true },
+    { name: "Expert", icon: "🏆", description: "50 lieux partagés", unlocked: false },
+    { name: "Légende", icon: "👑", description: "100 lieux partagés", unlocked: false }
   ];
+
+  const handleSaveProfile = () => {
+    setIsEditing(false);
+    // Ici vous sauvegarderiez les données
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Cover Image */}
-      <div className="relative h-64 md:h-80 overflow-hidden">
-        <img 
-          src={user.coverImage} 
-          alt="Cover"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute top-4 right-4">
-          <Button variant="secondary" size="sm" className="flex items-center space-x-2">
-            <Camera className="w-4 h-4" />
-            <span>Modifier la couverture</span>
-          </Button>
-        </div>
-      </div>
+      <Navigation />
 
-      {/* Profile Header */}
-      <div className="container mx-auto px-4 -mt-20 relative z-10">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-            <div className="relative">
-              <img 
-                src={user.avatar} 
-                alt={user.name}
-                className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
-              />
-              <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                <Camera className="w-4 h-4" />
-              </button>
-            </div>
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Profile Header */}
+          <Card className="mb-8">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div className="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108755-2616b9e77fa5?w=150&h=150&fit=crop&crop=face"
+                    alt="Photo de profil"
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover"
+                  />
+                  <Button
+                    size="sm"
+                    className="absolute bottom-0 right-0 rounded-full p-2"
+                    variant="outline"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </Button>
+                </div>
 
-            <div className="flex-1">
-              <div className="flex items-center space-x-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
-                <Badge className={user.badgeColor}>{user.badge}</Badge>
-                <Button variant="outline" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
-                  Modifier le profil
-                </Button>
+                <div className="flex-1">
+                  {isEditing ? (
+                    <div className="space-y-4">
+                      <Input
+                        value={userInfo.name}
+                        onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
+                        className="text-2xl font-bold"
+                      />
+                      <Textarea
+                        value={userInfo.bio}
+                        onChange={(e) => setUserInfo({...userInfo, bio: e.target.value})}
+                        rows={3}
+                      />
+                      <Input
+                        value={userInfo.location}
+                        onChange={(e) => setUserInfo({...userInfo, location: e.target.value})}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                        <h1 className="text-2xl md:text-3xl font-bold">{userInfo.name}</h1>
+                        <div className="flex gap-2">
+                          <Badge className="bg-blue-100 text-blue-800">Explorateur Expert</Badge>
+                          <Badge className="bg-green-100 text-green-800">Top Contributeur</Badge>
+                        </div>
+                      </div>
+                      <p className="text-gray-600 mb-4 max-w-2xl">{userInfo.bio}</p>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-gray-500">
+                        <div className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-1" />
+                          {userInfo.location}
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 mr-1" />
+                          {userInfo.joinDate}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  {isEditing ? (
+                    <>
+                      <Button onClick={handleSaveProfile} className="bg-green-600 hover:bg-green-700">
+                        Sauvegarder
+                      </Button>
+                      <Button variant="outline" onClick={() => setIsEditing(false)}>
+                        Annuler
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button onClick={() => setIsEditing(true)} variant="outline">
+                        <Edit3 className="w-4 h-4 mr-2" />
+                        Modifier
+                      </Button>
+                      <Button variant="outline">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
-              <p className="text-gray-600 mb-3">{user.bio}</p>
-              <div className="flex items-center text-gray-500 mb-4">
-                <MapPin className="w-4 h-4 mr-1" />
-                <span>{user.location} • Membre depuis {user.joinedAt}</span>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mt-8 pt-6 border-t">
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.placesShared}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Lieux partagés</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-red-600">{stats.likes}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Likes reçus</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-green-600">{stats.followers}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Abonnés</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-purple-600">{stats.following}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Abonnements</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-yellow-600">{stats.reviews}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Avis donnés</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl md:text-2xl font-bold text-orange-600">{stats.events}</div>
+                  <div className="text-xs md:text-sm text-gray-500">Événements</div>
+                </div>
               </div>
-            </div>
+            </CardContent>
+          </Card>
 
-            <div className="flex items-center space-x-6">
-              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
-                <Settings className="w-4 h-4 mr-2" />
-                Paramètres
-              </Button>
-            </div>
-          </div>
+          {/* Content Tabs */}
+          <Tabs defaultValue="places" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="places">Mes lieux</TabsTrigger>
+              <TabsTrigger value="liked">Favoris</TabsTrigger>
+              <TabsTrigger value="achievements">Succès</TabsTrigger>
+              <TabsTrigger value="activity">Activité</TabsTrigger>
+            </TabsList>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6 pt-6 border-t">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{user.placesShared}</div>
-              <div className="text-gray-600">Lieux partagés</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{user.followers.toLocaleString()}</div>
-              <div className="text-gray-600">Abonnés</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{user.following}</div>
-              <div className="text-gray-600">Abonnements</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{user.totalLikes.toLocaleString()}</div>
-              <div className="text-gray-600">Likes reçus</div>
-            </div>
-          </div>
-        </div>
-      </div>
+            {/* My Places */}
+            <TabsContent value="places" className="space-y-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h2 className="text-xl font-bold">Mes lieux partagés ({userPlaces.length})</h2>
+                <Link to="/share">
+                  <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                    Partager un nouveau lieu
+                  </Button>
+                </Link>
+              </div>
 
-      {/* Content Tabs */}
-      <div className="container mx-auto px-4 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="places">Mes lieux ({user.placesShared})</TabsTrigger>
-            <TabsTrigger value="favorites">Favoris</TabsTrigger>
-            <TabsTrigger value="followers">Abonnés ({user.followers.toLocaleString()})</TabsTrigger>
-          </TabsList>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {userPlaces.map((place) => (
+                  <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="relative">
+                      <Link to={`/place/${place.id}`}>
+                        <img
+                          src={place.image}
+                          alt={place.name}
+                          className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </Link>
+                      <div className="absolute top-3 left-3">
+                        <Badge className="bg-white/90 text-gray-800">
+                          {place.category}
+                        </Badge>
+                      </div>
+                      <div className="absolute top-3 right-3">
+                        <div className="bg-white/90 rounded-full px-2 py-1 flex items-center space-x-1">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-medium">{place.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <Link to={`/place/${place.id}`}>
+                        <h3 className="font-bold mb-2 hover:text-blue-600 transition-colors">
+                          {place.name}
+                        </h3>
+                      </Link>
+                      <div className="flex items-center text-gray-500 mb-3">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        <span className="text-sm">{place.location}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center">
+                          <Heart className="w-4 h-4 mr-1 text-red-500" />
+                          <span>{place.likes} likes</span>
+                        </div>
+                        <span className="text-gray-500">{place.dateAdded}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
-          <TabsContent value="places" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {userPlaces.map((place) => (
-                <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="relative">
-                    <img 
-                      src={place.image} 
-                      alt={place.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <Badge className="absolute top-4 left-4 bg-white/90 text-gray-800">
-                      {place.category}
-                    </Badge>
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{place.name}</h3>
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            {/* Liked Places */}
+            <TabsContent value="liked" className="space-y-6">
+              <h2 className="text-xl font-bold">Mes lieux favoris ({likedPlaces.length})</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {likedPlaces.map((place) => (
+                  <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="relative">
+                      <Link to={`/place/${place.id}`}>
+                        <img
+                          src={place.image}
+                          alt={place.name}
+                          className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </Link>
+                      <div className="absolute top-3 right-3">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="bg-white/90 hover:bg-white p-2 rounded-full"
+                        >
+                          <Heart className="w-4 h-4 fill-red-500 text-red-500" />
+                        </Button>
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <Link to={`/place/${place.id}`}>
+                        <h3 className="font-bold mb-2 hover:text-blue-600 transition-colors">
+                          {place.name}
+                        </h3>
+                      </Link>
+                      <div className="flex items-center text-gray-500 mb-3">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        <span className="text-sm">{place.location}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center">
+                          <Star className="w-4 h-4 mr-1 fill-yellow-400 text-yellow-400" />
                           <span>{place.rating}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <Heart className="w-4 h-4" />
-                          <span>{place.likes}</span>
-                        </div>
+                        <span className="text-gray-500">Par {place.author}</span>
                       </div>
-                      <span>{place.views} vues</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
-          <TabsContent value="favorites" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favoriteePlaces.map((place) => (
-                <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="relative">
-                    <img 
-                      src={place.image} 
-                      alt={place.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <Badge className="absolute top-4 left-4 bg-white/90 text-gray-800">
-                      {place.category}
-                    </Badge>
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{place.name}</h3>
-                    <p className="text-sm text-gray-600">Ajouté par {place.addedBy}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="followers" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {followers.map((follower) => (
-                <Card key={follower.id}>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <img 
-                          src={follower.avatar} 
-                          alt={follower.name}
-                          className="w-12 h-12 rounded-full"
-                        />
-                        <div>
-                          <h3 className="font-medium text-gray-900">{follower.name}</h3>
-                          <p className="text-sm text-gray-600">{follower.placesShared} lieux partagés</p>
-                        </div>
+            {/* Achievements */}
+            <TabsContent value="achievements" className="space-y-6">
+              <h2 className="text-xl font-bold">Mes succès</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {achievements.map((achievement, index) => (
+                  <Card key={index} className={`${achievement.unlocked ? 'bg-gradient-to-br from-blue-50 to-green-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+                    <CardContent className="p-6 text-center">
+                      <div className={`text-4xl mb-4 ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}>
+                        {achievement.icon}
                       </div>
-                      <Button 
-                        variant={follower.isFollowing ? "outline" : "default"}
-                        size="sm"
-                        className={follower.isFollowing ? "" : "bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"}
-                      >
-                        {follower.isFollowing ? 'Suivi' : 'Suivre'}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+                      <h3 className={`font-bold mb-2 ${achievement.unlocked ? 'text-gray-800' : 'text-gray-500'}`}>
+                        {achievement.name}
+                      </h3>
+                      <p className={`text-sm ${achievement.unlocked ? 'text-gray-600' : 'text-gray-400'}`}>
+                        {achievement.description}
+                      </p>
+                      {achievement.unlocked && (
+                        <Badge className="mt-3 bg-green-100 text-green-800">
+                          Débloqué
+                        </Badge>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Activity */}
+            <TabsContent value="activity" className="space-y-6">
+              <h2 className="text-xl font-bold">Activité récente</h2>
+              
+              <div className="space-y-4">
+                {[
+                  { action: "A partagé un nouveau lieu", target: "Château de Versailles", time: "Il y a 2 heures", icon: <MapPin className="w-4 h-4 text-blue-600" /> },
+                  { action: "A aimé le lieu", target: "Lac alpin", time: "Il y a 5 heures", icon: <Heart className="w-4 h-4 text-red-600" /> },
+                  { action: "S'est abonné(e) à", target: "Sophie Laurent", time: "Il y a 1 jour", icon: <Users className="w-4 h-4 text-green-600" /> },
+                  { action: "A laissé un avis sur", target: "Village perché", time: "Il y a 2 jours", icon: <Star className="w-4 h-4 text-yellow-600" /> },
+                  { action: "A partagé un nouveau lieu", target: "Plage sauvage", time: "Il y a 4 jours", icon: <MapPin className="w-4 h-4 text-blue-600" /> }
+                ].map((activity, index) => (
+                  <Card key={index}>
+                    <CardContent className="p-4 flex items-center gap-4">
+                      <div className="bg-gray-100 rounded-full p-3">
+                        {activity.icon}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-gray-600">
+                          <span className="font-semibold text-gray-800">{userInfo.name}</span> {activity.action}{" "}
+                          <span className="font-semibold text-gray-800">{activity.target}</span>
+                        </p>
+                        <p className="text-sm text-gray-500">{activity.time}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

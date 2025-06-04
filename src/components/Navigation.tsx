@@ -1,8 +1,8 @@
 
-import React from 'react';
-import { MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavigationProps {
   transparent?: boolean;
@@ -10,6 +10,7 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -21,17 +22,19 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
     }`}>
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <a href="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
               <MapPin className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
               Tourisma
             </span>
-          </a>
+          </Link>
+          
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a 
-              href="/" 
+            <Link 
+              to="/" 
               className={`font-medium transition-colors ${
                 isActive('/') 
                   ? 'text-blue-600' 
@@ -39,9 +42,9 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               }`}
             >
               Accueil
-            </a>
-            <a 
-              href="/discover" 
+            </Link>
+            <Link 
+              to="/discover" 
               className={`font-medium transition-colors ${
                 isActive('/discover') 
                   ? 'text-blue-600' 
@@ -49,9 +52,9 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               }`}
             >
               Découvrir
-            </a>
-            <a 
-              href="/community" 
+            </Link>
+            <Link 
+              to="/community" 
               className={`font-medium transition-colors ${
                 isActive('/community') 
                   ? 'text-blue-600' 
@@ -59,9 +62,9 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               }`}
             >
               Communauté
-            </a>
-            <a 
-              href="/profile" 
+            </Link>
+            <Link 
+              to="/profile" 
               className={`font-medium transition-colors ${
                 isActive('/profile') 
                   ? 'text-blue-600' 
@@ -69,15 +72,83 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               }`}
             >
               Profil
-            </a>
-            <a href="/share">
+            </Link>
+            <Link to="/share">
               <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                 Partager un lieu
               </Button>
-            </a>
+            </Link>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button 
+              variant="ghost" 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden py-4 px-4 bg-white border-t border-gray-100">
+          <nav className="flex flex-col space-y-4">
+            <Link 
+              to="/" 
+              className={`font-medium transition-colors py-2 ${
+                isActive('/') 
+                  ? 'text-blue-600' 
+                  : 'text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Accueil
+            </Link>
+            <Link 
+              to="/discover" 
+              className={`font-medium transition-colors py-2 ${
+                isActive('/discover') 
+                  ? 'text-blue-600' 
+                  : 'text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Découvrir
+            </Link>
+            <Link 
+              to="/community" 
+              className={`font-medium transition-colors py-2 ${
+                isActive('/community') 
+                  ? 'text-blue-600' 
+                  : 'text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Communauté
+            </Link>
+            <Link 
+              to="/profile" 
+              className={`font-medium transition-colors py-2 ${
+                isActive('/profile') 
+                  ? 'text-blue-600' 
+                  : 'text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Profil
+            </Link>
+            <Link to="/share" onClick={() => setMobileMenuOpen(false)}>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                Partager un lieu
+              </Button>
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
