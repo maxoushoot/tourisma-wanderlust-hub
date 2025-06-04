@@ -1,11 +1,11 @@
-
 import React, { useState } from 'react';
-import { Search, Filter, MapPin, Star, Heart, Eye } from 'lucide-react';
+import { Search, Filter, MapPin, Star, Heart, Eye, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Navigation from '@/components/Navigation';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const Discover = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const places = [
     {
@@ -107,143 +108,184 @@ const Discover = () => {
     return matchesSearch && matchesCategory && matchesRegion;
   });
 
+  const FilterContent = () => (
+    <div className="space-y-4">
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-2 block">Catégorie</label>
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Catégorie" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map(category => (
+              <SelectItem key={category} value={category}>
+                {category === 'all' ? 'Toutes les catégories' : category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-2 block">Région</label>
+        <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Région" />
+          </SelectTrigger>
+          <SelectContent>
+            {regions.map(region => (
+              <SelectItem key={region} value={region}>
+                {region === 'all' ? 'Toutes les régions' : region}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <Navigation />
 
-      {/* Header */}
-      <section className="py-8 md:py-12 px-4 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold text-center mb-4 md:mb-6 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-            Découvrez des destinations
+      {/* Mobile-first Header */}
+      <section className="pt-4 pb-6 px-4 bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto max-w-md">
+          <h1 className="text-2xl md:text-3xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            Découvrir
           </h1>
-          <p className="text-base md:text-xl text-gray-600 text-center mb-6 md:mb-8 max-w-3xl mx-auto">
-            Explorez notre collection de lieux extraordinaires recommandés par la communauté
+          <p className="text-sm text-gray-600 text-center mb-6">
+            Trouvez votre prochaine aventure
           </p>
 
-          {/* Search and Filters */}
-          <div className="max-w-4xl mx-auto space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input
-                  placeholder="Rechercher un lieu, une ville..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 py-3 border-2 border-blue-200 focus:border-blue-500 rounded-xl"
-                />
-              </div>
-              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 px-6 py-3 rounded-xl">
-                <Filter className="w-4 h-4 mr-2" />
-                Rechercher
-              </Button>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full sm:w-48 border-2 border-blue-200 rounded-xl">
-                  <SelectValue placeholder="Catégorie" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 border-blue-200 rounded-xl">
-                  {categories.map(category => (
-                    <SelectItem key={category} value={category} className="hover:bg-blue-50">
-                      {category === 'all' ? 'Toutes les catégories' : category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                <SelectTrigger className="w-full sm:w-48 border-2 border-blue-200 rounded-xl">
-                  <SelectValue placeholder="Région" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 border-blue-200 rounded-xl">
-                  {regions.map(region => (
-                    <SelectItem key={region} value={region} className="hover:bg-blue-50">
-                      {region === 'all' ? 'Toutes les régions' : region}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {/* Mobile Search Bar */}
+          <div className="space-y-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Rechercher un lieu..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-12 py-3 rounded-full border-2 border-gray-200 focus:border-blue-500 bg-white shadow-sm"
+              />
+              
+              {/* Mobile Filter Button */}
+              <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+                <SheetTrigger asChild>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200"
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="h-[40vh] rounded-t-2xl">
+                  <SheetHeader className="pb-4">
+                    <SheetTitle>Filtres</SheetTitle>
+                  </SheetHeader>
+                  <FilterContent />
+                  <div className="flex gap-2 mt-6">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setSelectedCategory('all');
+                        setSelectedRegion('all');
+                      }}
+                      className="flex-1"
+                    >
+                      Réinitialiser
+                    </Button>
+                    <Button 
+                      onClick={() => setFiltersOpen(false)}
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-green-600"
+                    >
+                      Appliquer
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Results */}
-      <section className="py-8 md:py-12 px-4">
+      {/* Results Counter - Mobile optimized */}
+      <section className="px-4 pb-4">
         <div className="container mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800">
-              {filteredPlaces.length} lieu{filteredPlaces.length > 1 ? 's' : ''} trouvé{filteredPlaces.length > 1 ? 's' : ''}
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {filteredPlaces.length} lieu{filteredPlaces.length > 1 ? 's' : ''}
             </h2>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
-                Plus populaires
+            <div className="hidden md:flex gap-2">
+              <Button variant="outline" size="sm" className="text-xs">
+                Populaires
               </Button>
-              <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
+              <Button variant="outline" size="sm" className="text-xs">
                 Mieux notés
-              </Button>
-              <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
-                Plus récents
               </Button>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+      {/* Mobile-optimized Cards Grid */}
+      <section className="px-4 pb-20">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredPlaces.map((place) => (
-              <Card key={place.id} className="overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <Card key={place.id} className="overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
                 <div className="relative">
                   <Link to={`/place/${place.id}`}>
                     <img 
                       src={place.image} 
                       alt={place.name}
-                      className="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </Link>
                   <div className="absolute top-3 left-3">
-                    <Badge className="bg-white/90 text-gray-800 hover:bg-white text-xs">
+                    <Badge className="bg-white/90 text-gray-800 text-xs font-medium px-2 py-1">
                       {place.category}
                     </Badge>
                   </div>
-                  <div className="absolute top-3 right-3 flex gap-2">
+                  <div className="absolute top-3 right-3">
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="bg-white/90 hover:bg-white p-2 rounded-full"
+                      className="bg-white/90 hover:bg-white p-2 rounded-full w-8 h-8"
                     >
                       <Heart className={`w-4 h-4 ${place.liked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
                     </Button>
                   </div>
                   <div className="absolute bottom-3 right-3">
                     <div className="bg-white/90 rounded-full px-2 py-1 flex items-center space-x-1">
-                      <Star className="w-3 h-3 md:w-4 md:h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-xs md:text-sm font-medium">{place.rating}</span>
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span className="text-xs font-medium">{place.rating}</span>
                     </div>
                   </div>
                 </div>
-                <CardContent className="p-4 md:p-6">
+                <CardContent className="p-4">
                   <Link to={`/place/${place.id}`}>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors cursor-pointer">
+                    <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-1">
                       {place.name}
                     </h3>
                   </Link>
-                  <div className="flex items-center text-gray-500 mb-3">
-                    <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-1" />
-                    <span className="text-xs md:text-sm">{place.location}</span>
+                  <div className="flex items-center text-gray-500 mb-2">
+                    <MapPin className="w-3 h-3 mr-1" />
+                    <span className="text-sm line-clamp-1">{place.location}</span>
                   </div>
-                  <p className="text-gray-600 text-xs md:text-sm mb-4 line-clamp-2">
+                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                     {place.description}
                   </p>
-                  <div className="flex items-center justify-between text-xs md:text-sm text-gray-500 mb-4">
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                     <span>{place.reviews} avis</span>
                     <div className="flex items-center">
-                      <Eye className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                      <Eye className="w-3 h-3 mr-1" />
                       <span>{place.views.toLocaleString()}</span>
                     </div>
                   </div>
-                  <Link to={`/place/${place.id}`} className="w-full">
-                    <Button className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-sm">
+                  <Link to={`/place/${place.id}`}>
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-sm py-2">
                       Voir les détails
                     </Button>
                   </Link>
@@ -254,9 +296,9 @@ const Discover = () => {
 
           {filteredPlaces.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun résultat trouvé</h3>
-              <p className="text-gray-500 mb-6">Essayez de modifier vos critères de recherche</p>
+              <div className="text-4xl mb-4">🔍</div>
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">Aucun résultat</h3>
+              <p className="text-gray-500 mb-6 text-sm">Essayez de modifier vos critères</p>
               <Button 
                 onClick={() => {
                   setSearchQuery('');
@@ -264,9 +306,9 @@ const Discover = () => {
                   setSelectedRegion('all');
                 }}
                 variant="outline"
-                className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                className="border-blue-200 text-blue-600"
               >
-                Réinitialiser les filtres
+                Réinitialiser
               </Button>
             </div>
           )}
