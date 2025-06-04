@@ -135,7 +135,7 @@ const Index = () => {
             <span className="text-sm font-medium text-gray-700">Plus de 10,000 destinations vérifiées</span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-6 md:mb-8 leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-6 md:mb-8 leading-tight">
             <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent">
               Découvrez des lieux
             </span>
@@ -174,7 +174,7 @@ const Index = () => {
           </div>
 
           {/* Enhanced Stats */}
-          <div className="grid grid-cols-3 gap-6 md:gap-12 max-w-3xl mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 max-w-3xl mx-auto px-4">
             <div className="text-center group">
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-blue-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">1,200+</div>
@@ -407,7 +407,7 @@ const Index = () => {
         
         <div className="container mx-auto text-center relative z-10">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+            <h2 className="text-3xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Prêt à partager
               </span>
