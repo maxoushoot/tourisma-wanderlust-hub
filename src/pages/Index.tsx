@@ -1,17 +1,62 @@
 
 import { Search, MapPin, Users, Star, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { usePlaces } from "@/hooks/usePlaces";
-import { useCategories } from "@/hooks/useCategories";
 
 const Index = () => {
-  const { data: featuredPlaces = [], isLoading: placesLoading } = usePlaces();
-  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
+  const featuredPlaces = [
+    {
+      id: 1,
+      name: "Château de Versailles",
+      location: "Versailles, France",
+      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=500&h=300&fit=crop",
+      rating: 4.8,
+      reviews: 1250,
+      category: "Histoire",
+      description: "Découvrez l'opulence royale française dans ce château emblématique"
+    },
+    {
+      id: 2,
+      name: "Lac de montagne",
+      location: "Alpes, France",
+      image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500&h=300&fit=crop",
+      rating: 4.9,
+      reviews: 890,
+      category: "Nature",
+      description: "Un lac cristallin entouré de sommets majestueux"
+    },
+    {
+      id: 3,
+      name: "Pont mystique",
+      location: "Forêt enchantée",
+      image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=500&h=300&fit=crop",
+      rating: 4.7,
+      reviews: 650,
+      category: "Aventure",
+      description: "Un pont spectaculaire au-dessus d'une cascade majestueuse"
+    },
+    {
+      id: 4,
+      name: "Vallée sauvage",
+      location: "Parc National",
+      image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?w=500&h=300&fit=crop",
+      rating: 4.6,
+      reviews: 430,
+      category: "Nature",
+      description: "Une vallée préservée avec une faune exceptionnelle"
+    }
+  ];
+
+  const categories = [
+    { name: "Nature", icon: "🏔️", count: 245 },
+    { name: "Histoire", icon: "🏛️", count: 128 },
+    { name: "Aventure", icon: "🎒", count: 89 },
+    { name: "Culture", icon: "🎭", count: 156 },
+    { name: "Gastronomie", icon: "🍷", count: 92 },
+    { name: "Plages", icon: "🏖️", count: 203 }
+  ];
 
   const testimonials = [
     {
@@ -52,15 +97,15 @@ const Index = () => {
               </span>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-blue-600 font-medium">Accueil</Link>
-              <Link to="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</Link>
-              <Link to="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</Link>
-              <Link to="/profile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Profil</Link>
-              <Link to="/share">
+              <a href="/" className="text-blue-600 font-medium">Accueil</a>
+              <a href="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</a>
+              <a href="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</a>
+              <a href="/profile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Profil</a>
+              <a href="/share">
                 <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                   Partager un lieu
                 </Button>
-              </Link>
+              </a>
             </nav>
           </div>
         </div>
@@ -117,24 +162,15 @@ const Index = () => {
             Explorez par catégorie
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categoriesLoading
-              ? Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="h-24" />
-                ))
-              : categories.map((category, index) => (
-                  <Card
-                    key={index}
-                    className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border-2 hover:border-blue-200"
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="text-4xl mb-4">{category.icon}</div>
-                      <h3 className="font-semibold text-gray-800 mb-2">
-                        {category.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">{category.count} lieux</p>
-                    </CardContent>
-                  </Card>
-                ))}
+            {categories.map((category, index) => (
+              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border-2 hover:border-blue-200">
+                <CardContent className="p-6 text-center">
+                  <div className="text-4xl mb-4">{category.icon}</div>
+                  <h3 className="font-semibold text-gray-800 mb-2">{category.name}</h3>
+                  <p className="text-sm text-gray-500">{category.count} lieux</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -149,24 +185,17 @@ const Index = () => {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {placesLoading
-              ? Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-64" />
-                ))
-              : featuredPlaces.map((place) => (
-                  <Card
-                    key={place.id}
-                    className="overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 group cursor-pointer"
-                  >
+            {featuredPlaces.map((place) => (
+              <Card key={place.id} className="overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 group cursor-pointer">
                 <div className="relative">
-                  <img
-                    src={place.images[0]}
+                  <img 
+                    src={place.image} 
                     alt={place.name}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-white/90 text-gray-800 hover:bg-white">
-                      {place.category.name}
+                      {place.category}
                     </Badge>
                   </div>
                   <div className="absolute top-4 right-4">
@@ -182,20 +211,20 @@ const Index = () => {
                   </h3>
                   <div className="flex items-center text-gray-500 mb-3">
                     <MapPin className="w-4 h-4 mr-1" />
-                    <span className="text-sm">{place.location.city}</span>
+                    <span className="text-sm">{place.location}</span>
                   </div>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {place.description}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{place.reviewsCount} avis</span>
+                    <span className="text-sm text-gray-500">{place.reviews} avis</span>
                     <Button size="sm" className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                       Découvrir
                     </Button>
                   </div>
                 </CardContent>
-                  </Card>
-                ))}
+              </Card>
+            ))}
           </div>
         </div>
       </section>

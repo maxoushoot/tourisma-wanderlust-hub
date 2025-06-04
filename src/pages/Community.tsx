@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Link } from 'react-router-dom';
-import { mockCategories } from '@/data/mockData';
 
 const Community = () => {
   const [activeTab, setActiveTab] = useState('trending');
@@ -86,8 +84,8 @@ const Community = () => {
     {
       id: '1',
       name: 'Mont-Saint-Michel',
-      images: ['https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=400&h=250&fit=crop'],
-      category: mockCategories[1],
+      image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=400&h=250&fit=crop',
+      category: 'Histoire',
       views: 2540,
       likes: 186,
       trend: '+25%'
@@ -95,8 +93,8 @@ const Community = () => {
     {
       id: '2',
       name: 'Calanques de Marseille',
-      images: ['https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=250&fit=crop'],
-      category: mockCategories[0],
+      image: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=250&fit=crop',
+      category: 'Nature',
       views: 1890,
       likes: 142,
       trend: '+18%'
@@ -104,8 +102,8 @@ const Community = () => {
     {
       id: '3',
       name: 'Château de Fontainebleau',
-      images: ['https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=250&fit=crop'],
-      category: mockCategories[1],
+      image: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=250&fit=crop',
+      category: 'Histoire',
       views: 1650,
       likes: 98,
       trend: '+12%'
@@ -127,9 +125,9 @@ const Community = () => {
               </span>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Accueil</Link>
-              <Link to="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</Link>
-              <Link to="/community" className="text-blue-600 font-medium">Communauté</Link>
+              <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+              <a href="/discover" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Découvrir</a>
+              <a href="/community" className="text-blue-600 font-medium">Communauté</a>
               <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                 Partager un lieu
               </Button>
@@ -203,8 +201,8 @@ const Community = () => {
                     {trendingPlaces.map((place) => (
                       <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                         <div className="flex">
-                          <img
-                            src={place.images[0]}
+                          <img 
+                            src={place.image} 
                             alt={place.name}
                             className="w-48 h-32 object-cover"
                           />
@@ -212,7 +210,7 @@ const Community = () => {
                             <div className="flex items-start justify-between">
                               <div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">{place.name}</h3>
-                                <Badge className="mb-3">{place.category.name}</Badge>
+                                <Badge className="mb-3">{place.category}</Badge>
                                 <div className="flex items-center space-x-4 text-gray-600">
                                   <div className="flex items-center space-x-1">
                                     <Eye className="w-4 h-4" />

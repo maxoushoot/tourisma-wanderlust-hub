@@ -32,8 +32,6 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Important: run `npm i` before any build or lint commands
-
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```

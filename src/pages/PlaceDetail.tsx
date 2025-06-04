@@ -1,28 +1,68 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { MapPin, Star, Heart, Share2, Camera, Clock, Euro, Users, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Skeleton } from '@/components/ui/skeleton';
-import { usePlace } from '@/hooks/usePlace';
-import { useReviews } from '@/hooks/useReviews';
 
 const PlaceDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { id = '' } = useParams();
-  const { data: place, isLoading } = usePlace(id);
-  const { data: reviews = [], isLoading: reviewsLoading } = useReviews(id);
 
-  if (isLoading || !place) {
-    return (
-      <div className="p-6">
-        <Skeleton className="h-96 w-full" />
-      </div>
-    );
-  }
+  const place = {
+    id: '1',
+    name: 'Château de Chambord',
+    description: 'Le château de Chambord est un château français situé dans la commune de Chambord, dans le Loir-et-Cher. Il est l\'un des châteaux de la Loire les plus reconnaissables au monde en raison de son architecture Renaissance française très distinctive.',
+    images: [
+      'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&h=600&fit=crop'
+    ],
+    rating: 4.8,
+    reviewsCount: 1250,
+    location: {
+      address: 'Château de Chambord, 41250 Chambord',
+      city: 'Chambord',
+      country: 'France'
+    },
+    category: 'Histoire',
+    tags: ['château', 'renaissance', 'architecture', 'patrimoine'],
+    price: '€€',
+    duration: '2-3 heures',
+    difficulty: 'Facile',
+    bestTime: 'Avril à Octobre',
+    accessibility: true,
+    createdBy: {
+      name: 'Marie Dubois',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b9e77fa5?w=100&h=100&fit=crop&crop=face',
+      placesShared: 15,
+      followersCount: 120
+    }
+  };
+
+  const reviews = [
+    {
+      id: '1',
+      user: {
+        name: 'Thomas Martin',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face'
+      },
+      rating: 5,
+      comment: 'Absolument magnifique ! L\'architecture est à couper le souffle et les jardins sont splendides.',
+      date: '2024-03-15',
+      images: ['https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=200&h=150&fit=crop']
+    },
+    {
+      id: '2',
+      user: {
+        name: 'Sophie Laurent',
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face'
+      },
+      rating: 4,
+      comment: 'Très beau château avec une histoire fascinante. Je recommande la visite guidée.',
+      date: '2024-03-10'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,7 +111,7 @@ const PlaceDetail = () => {
             {/* Header Info */}
             <div className="mb-6">
               <div className="flex items-center space-x-2 mb-2">
-                <Badge className="bg-blue-100 text-blue-800">{place.category.name}</Badge>
+                <Badge className="bg-blue-100 text-blue-800">{place.category}</Badge>
                 <div className="flex items-center space-x-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{place.rating}</span>
@@ -123,7 +163,7 @@ const PlaceDetail = () => {
                       <div className="text-center">
                         <Star className="w-8 h-8 mx-auto mb-2 text-orange-600" />
                         <div className="text-sm text-gray-600">Meilleure période</div>
-                        <div className="font-medium text-sm">{place.bestTimeToVisit}</div>
+                        <div className="font-medium text-sm">{place.bestTime}</div>
                       </div>
                     </div>
                   </CardContent>
@@ -132,11 +172,7 @@ const PlaceDetail = () => {
               
               <TabsContent value="reviews" className="mt-6">
                 <div className="space-y-6">
-                  {reviewsLoading
-                    ? Array.from({ length: 3 }).map((_, i) => (
-                        <Skeleton key={i} className="h-24" />
-                      ))
-                    : reviews.map((review) => (
+                  {reviews.map((review) => (
                     <Card key={review.id}>
                       <CardContent className="p-6">
                         <div className="flex items-start space-x-4">
@@ -153,9 +189,7 @@ const PlaceDetail = () => {
                                   <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                 ))}
                               </div>
-                              <span className="text-gray-500 text-sm">
-                                {new Date(review.createdAt).toLocaleDateString()}
-                              </span>
+                              <span className="text-gray-500 text-sm">{review.date}</span>
                             </div>
                             <p className="text-gray-700 mb-3">{review.comment}</p>
                             {review.images && (

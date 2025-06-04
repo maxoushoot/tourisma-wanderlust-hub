@@ -5,19 +5,80 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { usePlaces } from '@/hooks/usePlaces';
-import { useCategories } from '@/hooks/useCategories';
-import { Link } from 'react-router-dom';
 import { Place, PlaceCategory } from '@/types';
-
 
 const Discover = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
-  const { data: places = [], isLoading: placesLoading } = usePlaces();
+  // Données d'exemple
+  const categories: PlaceCategory[] = [
+    { id: '1', name: 'Nature', icon: '🏔️', count: 245, color: 'bg-green-100 text-green-800' },
+    { id: '2', name: 'Histoire', icon: '🏛️', count: 128, color: 'bg-blue-100 text-blue-800' },
+    { id: '3', name: 'Aventure', icon: '🎒', count: 89, color: 'bg-orange-100 text-orange-800' },
+    { id: '4', name: 'Culture', icon: '🎭', count: 156, color: 'bg-purple-100 text-purple-800' },
+    { id: '5', name: 'Gastronomie', icon: '🍷', count: 92, color: 'bg-red-100 text-red-800' },
+    { id: '6', name: 'Plages', icon: '🏖️', count: 203, color: 'bg-cyan-100 text-cyan-800' }
+  ];
+
+  const places: Place[] = [
+    {
+      id: '1',
+      name: 'Château de Chambord',
+      description: 'Un chef-d\'œuvre de la Renaissance française avec son architecture unique',
+      location: {
+        address: 'Château de Chambord',
+        city: 'Chambord',
+        country: 'France',
+        coordinates: { lat: 47.6161, lng: 1.5170 }
+      },
+      category: categories[1],
+      images: ['https://images.unsplash.com/photo-1466442929976-97f336a657be?w=500&h=300&fit=crop'],
+      rating: 4.8,
+      reviewsCount: 1250,
+      createdBy: {
+        id: '1',
+        name: 'Marie Dubois',
+        email: 'marie@example.com',
+        joinedAt: new Date(),
+        placesShared: 15,
+        followersCount: 120,
+        followingCount: 80
+      },
+      createdAt: new Date(),
+      tags: ['château', 'renaissance', 'architecture'],
+      price: '€€',
+      duration: '2-3 heures'
+    },
+    {
+      id: '2',
+      name: 'Gorges du Verdon',
+      description: 'Canyon spectaculaire aux eaux turquoise, parfait pour les activités nautiques',
+      location: {
+        address: 'Gorges du Verdon',
+        city: 'Alpes-de-Haute-Provence',
+        country: 'France',
+        coordinates: { lat: 43.7084, lng: 6.4028 }
+      },
+      category: categories[0],
+      images: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500&h=300&fit=crop'],
+      rating: 4.9,
+      reviewsCount: 890,
+      createdBy: {
+        id: '2',
+        name: 'Thomas Martin',
+        email: 'thomas@example.com',
+        joinedAt: new Date(),
+        placesShared: 25,
+        followersCount: 200,
+        followingCount: 150
+      },
+      createdAt: new Date(),
+      tags: ['canyon', 'nature', 'kayak'],
+      difficulty: 'Modéré',
+      duration: 'Journée complète'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -34,9 +95,9 @@ const Discover = () => {
               </span>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Accueil</Link>
-              <Link to="/discover" className="text-blue-600 font-medium">Découvrir</Link>
-              <Link to="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</Link>
+              <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+              <a href="/discover" className="text-blue-600 font-medium">Découvrir</a>
+              <a href="/community" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Communauté</a>
               <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                 Partager un lieu
               </Button>
@@ -70,25 +131,21 @@ const Discover = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Catégories populaires</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categoriesLoading
-              ? Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="h-20" />
-                ))
-              : categories.map((category) => (
-                  <Card
-                    key={category.id}
-                    className={`cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
-                      selectedCategory === category.id ? 'ring-2 ring-blue-500' : ''
-                    }`}
-                    onClick={() => setSelectedCategory(selectedCategory === category.id ? '' : category.id)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="text-3xl mb-2">{category.icon}</div>
-                      <h3 className="font-semibold text-gray-800 mb-1">{category.name}</h3>
-                      <Badge className={category.color}>{category.count} lieux</Badge>
-                    </CardContent>
-                  </Card>
-                ))}
+            {categories.map((category) => (
+              <Card 
+                key={category.id} 
+                className={`cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+                  selectedCategory === category.id ? 'ring-2 ring-blue-500' : ''
+                }`}
+                onClick={() => setSelectedCategory(selectedCategory === category.id ? '' : category.id)}
+              >
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl mb-2">{category.icon}</div>
+                  <h3 className="font-semibold text-gray-800 mb-1">{category.name}</h3>
+                  <Badge className={category.color}>{category.count} lieux</Badge>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
 
@@ -107,15 +164,11 @@ const Discover = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {placesLoading
-              ? Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="h-64" />
-                ))
-              : places.map((place) => (
-                  <Card key={place.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+            {places.map((place) => (
+              <Card key={place.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
                 <div className="relative">
-                  <img
-                    src={place.images[0]}
+                  <img 
+                    src={place.images[0]} 
                     alt={place.name}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -172,7 +225,7 @@ const Discover = () => {
                   </div>
                 </CardContent>
               </Card>
-                ))}
+            ))}
           </div>
         </div>
       </div>

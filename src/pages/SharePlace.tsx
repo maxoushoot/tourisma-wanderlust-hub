@@ -19,7 +19,7 @@ const SharePlace = () => {
     price: '',
     duration: '',
     difficulty: '',
-    bestTimeToVisit: '',
+    bestTime: '',
     accessibility: false,
     tags: [] as string[],
     images: [] as string[]
@@ -36,10 +36,7 @@ const SharePlace = () => {
     { id: 'plages', name: 'Plages', icon: '🏖️' }
   ];
 
-  const handleInputChange = (
-    field: string,
-    value: string | boolean | string[]
-  ) => {
+  const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -243,11 +240,11 @@ const SharePlace = () => {
                   </select>
                 </div>
                 <div>
-                  <Label htmlFor="bestTimeToVisit">Meilleure période</Label>
+                  <Label htmlFor="bestTime">Meilleure période</Label>
                   <Input
-                    id="bestTimeToVisit"
-                    value={formData.bestTimeToVisit}
-                    onChange={(e) => handleInputChange('bestTimeToVisit', e.target.value)}
+                    id="bestTime"
+                    value={formData.bestTime}
+                    onChange={(e) => handleInputChange('bestTime', e.target.value)}
                     placeholder="Ex: Avril à Octobre"
                   />
                 </div>
