@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { mockCategories } from '@/data/mockData';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState('places');
@@ -29,8 +30,8 @@ const Profile = () => {
     {
       id: '1',
       name: 'Château de Chambord',
-      image: 'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=300&h=200&fit=crop',
-      category: 'Histoire',
+      images: ['https://images.unsplash.com/photo-1466442929976-97f336a657be?w=300&h=200&fit=crop'],
+      category: mockCategories[1],
       rating: 4.8,
       likes: 156,
       views: 1240
@@ -38,8 +39,8 @@ const Profile = () => {
     {
       id: '2',
       name: 'Gorges du Verdon',
-      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=200&fit=crop',
-      category: 'Nature',
+      images: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=200&fit=crop'],
+      category: mockCategories[0],
       rating: 4.9,
       likes: 203,
       views: 1890
@@ -47,8 +48,8 @@ const Profile = () => {
     {
       id: '3',
       name: 'Village de Rocamadour',
-      image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=300&h=200&fit=crop',
-      category: 'Histoire',
+      images: ['https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?w=300&h=200&fit=crop'],
+      category: mockCategories[1],
       rating: 4.7,
       likes: 98,
       views: 760
@@ -59,15 +60,15 @@ const Profile = () => {
     {
       id: '4',
       name: 'Mont-Saint-Michel',
-      image: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=300&h=200&fit=crop',
-      category: 'Histoire',
+      images: ['https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=300&h=200&fit=crop'],
+      category: mockCategories[1],
       addedBy: 'Thomas Martin'
     },
     {
       id: '5',
       name: 'Calanques de Marseille',
-      image: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=300&h=200&fit=crop',
-      category: 'Nature',
+      images: ['https://images.unsplash.com/photo-1500673922987-e212871fec22?w=300&h=200&fit=crop'],
+      category: mockCategories[0],
       addedBy: 'Sophie Laurent'
     }
   ];
@@ -182,13 +183,13 @@ const Profile = () => {
               {userPlaces.map((place) => (
                 <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                   <div className="relative">
-                    <img 
-                      src={place.image} 
+                    <img
+                      src={place.images[0]}
                       alt={place.name}
                       className="w-full h-48 object-cover"
                     />
                     <Badge className="absolute top-4 left-4 bg-white/90 text-gray-800">
-                      {place.category}
+                      {place.category.name}
                     </Badge>
                   </div>
                   <CardContent className="p-4">
@@ -217,13 +218,13 @@ const Profile = () => {
               {favoritePlaces.map((place) => (
                 <Card key={place.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                   <div className="relative">
-                    <img 
-                      src={place.image} 
+                    <img
+                      src={place.images[0]}
                       alt={place.name}
                       className="w-full h-48 object-cover"
                     />
                     <Badge className="absolute top-4 left-4 bg-white/90 text-gray-800">
-                      {place.category}
+                      {place.category.name}
                     </Badge>
                   </div>
                   <CardContent className="p-4">

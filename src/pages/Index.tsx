@@ -160,13 +160,13 @@ const Index = () => {
                   >
                 <div className="relative">
                   <img
-                    src={place.image}
+                    src={place.images[0]}
                     alt={place.name}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-white/90 text-gray-800 hover:bg-white">
-                      {place.category}
+                      {place.category.name}
                     </Badge>
                   </div>
                   <div className="absolute top-4 right-4">
@@ -182,13 +182,13 @@ const Index = () => {
                   </h3>
                   <div className="flex items-center text-gray-500 mb-3">
                     <MapPin className="w-4 h-4 mr-1" />
-                    <span className="text-sm">{place.location}</span>
+                    <span className="text-sm">{place.location.city}</span>
                   </div>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {place.description}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{place.reviews} avis</span>
+                    <span className="text-sm text-gray-500">{place.reviewsCount} avis</span>
                     <Button size="sm" className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
                       Découvrir
                     </Button>

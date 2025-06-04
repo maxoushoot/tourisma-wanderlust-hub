@@ -71,7 +71,7 @@ const PlaceDetail = () => {
             {/* Header Info */}
             <div className="mb-6">
               <div className="flex items-center space-x-2 mb-2">
-                <Badge className="bg-blue-100 text-blue-800">{place.category}</Badge>
+                <Badge className="bg-blue-100 text-blue-800">{place.category.name}</Badge>
                 <div className="flex items-center space-x-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{place.rating}</span>
@@ -123,7 +123,7 @@ const PlaceDetail = () => {
                       <div className="text-center">
                         <Star className="w-8 h-8 mx-auto mb-2 text-orange-600" />
                         <div className="text-sm text-gray-600">Meilleure période</div>
-                        <div className="font-medium text-sm">{place.bestTime}</div>
+                        <div className="font-medium text-sm">{place.bestTimeToVisit}</div>
                       </div>
                     </div>
                   </CardContent>
@@ -153,7 +153,9 @@ const PlaceDetail = () => {
                                   <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                 ))}
                               </div>
-                              <span className="text-gray-500 text-sm">{review.date}</span>
+                              <span className="text-gray-500 text-sm">
+                                {new Date(review.createdAt).toLocaleDateString()}
+                              </span>
                             </div>
                             <p className="text-gray-700 mb-3">{review.comment}</p>
                             {review.images && (
