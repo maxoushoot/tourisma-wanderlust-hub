@@ -156,14 +156,16 @@ const Index = () => {
             <div className="relative group">
               <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-green-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
               <div className="relative bg-white rounded-2xl p-2 shadow-2xl border border-gray-200/50">
-                <div className="flex items-center">
-                  <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6 z-10" />
-                  <Input 
-                    placeholder="Rechercher une destination, une ville, un type de lieu..."
-                    className="pl-14 pr-6 py-4 md:py-6 text-base md:text-lg border-0 focus:ring-0 focus:outline-none bg-transparent rounded-xl text-gray-700 placeholder:text-gray-400"
-                  />
-                  <Link to="/discover">
-                    <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 rounded-xl px-6 md:px-8 py-4 md:py-6 text-base md:text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
+                <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 sm:w-6 sm:h-6 z-10" />
+                    <Input
+                      placeholder="Rechercher une destination, une ville, un type de lieu..."
+                      className="flex-1 w-full pl-10 sm:pl-14 pr-6 py-4 md:py-6 text-base md:text-lg border-0 focus:ring-0 focus:outline-none bg-transparent rounded-xl text-gray-700 placeholder:text-gray-400"
+                    />
+                  </div>
+                  <Link to="/discover" className="sm:ml-2">
+                    <Button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 rounded-xl px-6 md:px-8 py-4 md:py-6 text-base md:text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
                       <Search className="w-5 h-5 mr-2" />
                       Rechercher
                     </Button>
