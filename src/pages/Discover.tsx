@@ -10,13 +10,6 @@ import Navigation from '@/components/Navigation';
 import { Link } from 'react-router-dom';
 
 const Discover = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedRegion, setSelectedRegion] = useState('all');
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<'popular' | 'topRated' | null>(null);
-  const [likedPlaces, setLikedPlaces] = useState<number[]>(places.filter(p => p.liked).map(p => p.id));
-
   const places = [
     {
       id: 1,
@@ -97,6 +90,15 @@ const Discover = () => {
       views: 18750
     }
   ];
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'popular' | 'topRated' | null>(null);
+  const [likedPlaces, setLikedPlaces] = useState<number[]>(
+    places.filter((p) => p.liked).map((p) => p.id)
+  );
 
   const categories = ['all', 'Nature', 'Histoire', 'Aventure', 'Culture', 'Gastronomie', 'Plages'];
   const regions = ['all', 'Île-de-France', 'Rhône-Alpes', 'Provence', 'Occitanie', 'Grand Est', 'PACA'];
