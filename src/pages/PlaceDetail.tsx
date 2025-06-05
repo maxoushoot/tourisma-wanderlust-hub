@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import Navigation from '@/components/Navigation';
+import MapModal from '@/components/MapModal';
+import { toast } from '@/components/ui/use-toast';
 
 const PlaceDetail = () => {
   const { id } = useParams();
@@ -45,10 +47,11 @@ const PlaceDetail = () => {
       "Visitez les jardins tôt le matin pour plus de tranquillité",
       "Portez des chaussures confortables",
       "Prévoyez une journée complète pour tout voir"
-    ]
+    ],
+    bookingUrl: 'https://billetterie.chateauversailles.fr'
   };
 
-  const reviews = [
+  const [reviews, setReviews] = useState([
     {
       id: 1,
       author: "Marie L.",
@@ -73,9 +76,36 @@ const PlaceDetail = () => {
       date: "Il y a 2 semaines",
       comment: "Un incontournable ! La galerie des glaces est époustouflante. Les jardins à la française sont parfaitement entretenus."
     }
-  ];
+  ]);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [mapOpen, setMapOpen] = useState(false);
+
+  const sharePlace = () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: place.name, url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url);
+      toast({ title: 'Lien copié' });
+    }
+  };
+
+  const handleAddReview = () => {
+    if (!newReview.trim() || userRating === 0) return;
+    const newObj = {
+      id: reviews.length + 1,
+      author: 'Vous',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
+      rating: userRating,
+      date: 'Aujourd\'hui',
+      comment: newReview,
+    };
+    setReviews([newObj, ...reviews]);
+    setNewReview('');
+    setUserRating(0);
+    toast({ title: 'Avis publié' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -113,7 +143,12 @@ const PlaceDetail = () => {
                 >
                   <Heart className={`w-4 h-4 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
                 </Button>
-                <Button size="sm" variant="ghost" className="bg-white/90 hover:bg-white">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="bg-white/90 hover:bg-white"
+                  onClick={sharePlace}
+                >
                   <Share2 className="w-4 h-4 text-gray-600" />
                 </Button>
               </div>
@@ -242,7 +277,7 @@ const PlaceDetail = () => {
                     onChange={(e) => setNewReview(e.target.value)}
                     className="mb-3"
                   />
-                  <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                  <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700" onClick={handleAddReview}>
                     Publier l'avis
                   </Button>
                 </div>
@@ -306,9 +341,15 @@ const PlaceDetail = () => {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
-                  Réserver une visite
-                </Button>
+                <a
+                  href={place.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                    Réserver une visite
+                  </Button>
+                </a>
               </CardContent>
             </Card>
 
@@ -319,7 +360,7 @@ const PlaceDetail = () => {
                 <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
                   <p className="text-gray-500">Carte interactive</p>
                 </div>
-                <Button variant="outline" className="w-full mt-4">
+                <Button variant="outline" className="w-full mt-4" onClick={() => setMapOpen(true)}>
                   <MapPin className="w-4 h-4 mr-2" />
                   Voir sur la carte
                 </Button>
@@ -356,6 +397,7 @@ const PlaceDetail = () => {
           </div>
         </div>
       </div>
+      <MapModal open={mapOpen} onOpenChange={setMapOpen} location={place.location} />
     </div>
   );
 };

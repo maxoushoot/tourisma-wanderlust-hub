@@ -11,6 +11,8 @@ import PlaceDetail from "./pages/PlaceDetail";
 import SharePlace from "./pages/SharePlace";
 import Community from "./pages/Community";
 import Profile from "./pages/Profile";
+import CreateEvent from "./pages/CreateEvent";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,8 +29,10 @@ const App: React.FC = () => {
             <Route path="/discover" element={<Discover />} />
             <Route path="/place/:id" element={<PlaceDetail />} />
             <Route path="/share" element={<SharePlace />} />
+            <Route path="/create-event" element={<CreateEvent />} />
             <Route path="/community" element={<Community />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

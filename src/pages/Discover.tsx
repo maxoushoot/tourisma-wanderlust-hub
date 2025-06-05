@@ -14,6 +14,8 @@ const Discover = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'popular' | 'topRated' | null>(null);
+  const [likedPlaces, setLikedPlaces] = useState<number[]>(places.filter(p => p.liked).map(p => p.id));
 
   const places = [
     {
@@ -104,8 +106,16 @@ const Discover = () => {
                          place.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || place.category === selectedCategory;
     const matchesRegion = selectedRegion === 'all' || place.region === selectedRegion;
-    
+
     return matchesSearch && matchesCategory && matchesRegion;
+  }).sort((a, b) => {
+    if (sortOrder === 'popular') {
+      return b.views - a.views;
+    }
+    if (sortOrder === 'topRated') {
+      return b.rating - a.rating;
+    }
+    return 0;
   });
 
   const FilterContent = () => (
@@ -218,10 +228,20 @@ const Discover = () => {
               {filteredPlaces.length} lieu{filteredPlaces.length > 1 ? 's' : ''}
             </h2>
             <div className="hidden md:flex gap-2">
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => setSortOrder('popular')}
+              >
                 Populaires
               </Button>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => setSortOrder('topRated')}
+              >
                 Mieux notés
               </Button>
             </div>
@@ -253,8 +273,15 @@ const Discover = () => {
                       size="sm"
                       variant="ghost"
                       className="bg-white/90 hover:bg-white p-2 rounded-full w-8 h-8"
+                      onClick={() =>
+                        setLikedPlaces((prev) =>
+                          prev.includes(place.id)
+                            ? prev.filter((id) => id !== place.id)
+                            : [...prev, place.id]
+                        )
+                      }
                     >
-                      <Heart className={`w-4 h-4 ${place.liked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                      <Heart className={`w-4 h-4 ${likedPlaces.includes(place.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
                     </Button>
                   </div>
                   <div className="absolute bottom-3 right-3">

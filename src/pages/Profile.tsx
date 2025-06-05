@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Settings, MapPin, Heart, Star, Camera, Edit3, Share2, Calendar, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,9 +89,21 @@ const Profile = () => {
     { name: "Légende", icon: "👑", description: "100 lieux partagés", unlocked: false }
   ];
 
+  const [avatar, setAvatar] = useState(
+    'https://images.unsplash.com/photo-1494790108755-2616b9e77fa5?w=150&h=150&fit=crop&crop=face'
+  );
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const handleSaveProfile = () => {
     setIsEditing(false);
     // Ici vous sauvegarderiez les données
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setAvatar(url);
   };
 
   return (
@@ -106,14 +118,22 @@ const Profile = () => {
               <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                 <div className="relative">
                   <img
-                    src="https://images.unsplash.com/photo-1494790108755-2616b9e77fa5?w=150&h=150&fit=crop&crop=face"
+                    src={avatar}
                     alt="Photo de profil"
                     className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileRef}
+                    onChange={handleAvatarChange}
+                    className="hidden"
                   />
                   <Button
                     size="sm"
                     className="absolute bottom-0 right-0 rounded-full p-2"
                     variant="outline"
+                    onClick={() => fileRef.current?.click()}
                   >
                     <Camera className="w-4 h-4" />
                   </Button>
@@ -177,9 +197,11 @@ const Profile = () => {
                         <Edit3 className="w-4 h-4 mr-2" />
                         Modifier
                       </Button>
-                      <Button variant="outline">
-                        <Settings className="w-4 h-4" />
-                      </Button>
+                      <Link to="/settings">
+                        <Button variant="outline">
+                          <Settings className="w-4 h-4" />
+                        </Button>
+                      </Link>
                     </>
                   )}
                 </div>
