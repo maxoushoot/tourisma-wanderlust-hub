@@ -78,3 +78,12 @@ export interface UserActivity {
   targetUserId?: string;
   createdAt: Date;
 }
+
+export interface Notification {
+  id: string;
+  message: string;
+  link: string;
+  read: boolean;
+  createdAt: Date;
+}
+
