@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useNotifications } from '@/hooks/use-notifications';
 
 interface NavigationProps {
   transparent?: boolean;
@@ -14,6 +15,7 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { notifications, unreadCount, markAsRead } = useNotifications();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -49,9 +51,11 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                   <MapPin className="w-7 h-7 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-bold">3</span>
-                </div>
+                {unreadCount > 0 && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-bold">{unreadCount}</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-green-700 transition-all duration-300">
@@ -85,13 +89,23 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="relative p-2 hover:bg-gray-100 rounded-xl">
                     <Bell className="w-5 h-5 text-gray-600" />
-                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center p-0 rounded-full">
-                      2
-                    </Badge>
+                    {unreadCount > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center p-0 rounded-full">
+                        {unreadCount}
+                      </Badge>
+                    )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Aucune nouvelle notification</DropdownMenuItem>
+                  {notifications.length === 0 ? (
+                    <DropdownMenuItem>Aucune nouvelle notification</DropdownMenuItem>
+                  ) : (
+                    notifications.map((n) => (
+                      <DropdownMenuItem key={n.id} asChild onSelect={() => markAsRead(n.id)}>
+                        <Link to={n.link}>{n.message}</Link>
+                      </DropdownMenuItem>
+                    ))
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -144,11 +158,23 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="relative p-2 rounded-full">
                       <Bell className="w-5 h-5 text-gray-600" />
-                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center p-0 rounded-full">2</Badge>
+                      {unreadCount > 0 && (
+                        <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center p-0 rounded-full">
+                          {unreadCount}
+                        </Badge>
+                      )}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Aucune notification</DropdownMenuItem>
+                    {notifications.length === 0 ? (
+                      <DropdownMenuItem>Aucune notification</DropdownMenuItem>
+                    ) : (
+                      notifications.map((n) => (
+                        <DropdownMenuItem key={n.id} asChild onSelect={() => markAsRead(n.id)}>
+                          <Link to={n.link}>{n.message}</Link>
+                        </DropdownMenuItem>
+                      ))
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <DropdownMenu>
