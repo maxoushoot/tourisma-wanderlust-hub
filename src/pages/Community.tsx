@@ -8,9 +8,13 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navigation from '@/components/Navigation';
 import { Link } from 'react-router-dom';
+import { toast } from '@/components/ui/use-toast';
 
 const Community = () => {
   const [activeTab, setActiveTab] = useState('posts');
+  const [newPost, setNewPost] = useState('');
+  const [showMemberFilters, setShowMemberFilters] = useState(false);
+  const [followedMembers, setFollowedMembers] = useState<number[]>([]);
 
   const posts = [
     {
@@ -129,6 +133,23 @@ const Community = () => {
     }
   ];
 
+  const handlePublish = () => {
+    if (!newPost.trim()) return;
+    toast({ title: 'Publication envoyée' });
+    setNewPost('');
+  };
+
+  const handleJoin = (eventId: number) => {
+    toast({ title: `Inscription à l'événement ${eventId}` });
+  };
+
+  const handleFollow = (memberId: number) => {
+    setFollowedMembers((prev) =>
+      prev.includes(memberId) ? prev.filter((id) => id !== memberId) : [...prev, memberId]
+    );
+    toast({ title: 'Mise à jour du suivi' });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -177,6 +198,8 @@ const Community = () => {
                       <div className="flex-1">
                         <Input
                           placeholder="Partagez votre dernière découverte..."
+                          value={newPost}
+                          onChange={(e) => setNewPost(e.target.value)}
                           className="mb-3"
                         />
                         <div className="flex gap-2">
@@ -186,7 +209,7 @@ const Community = () => {
                               Partager un lieu
                             </Button>
                           </Link>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={handlePublish}>
                             <MessageCircle className="w-4 h-4 mr-2" />
                             Publier
                           </Button>
@@ -258,10 +281,12 @@ const Community = () => {
               <TabsContent value="events" className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <h2 className="text-xl font-bold">Événements à venir</h2>
-                  <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Créer un événement
-                  </Button>
+                  <Link to="/create-event">
+                    <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Créer un événement
+                    </Button>
+                  </Link>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -292,7 +317,7 @@ const Community = () => {
                             <span>Organisé par {event.organizer}</span>
                           </div>
                         </div>
-                        <Button className="w-full mt-4" variant="outline">
+                        <Button className="w-full mt-4" variant="outline" onClick={() => handleJoin(event.id)}>
                           Participer
                         </Button>
                       </CardContent>
@@ -308,8 +333,16 @@ const Community = () => {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input placeholder="Rechercher un membre..." className="pl-10" />
                   </div>
-                  <Button variant="outline">Filtres</Button>
+                  <Button variant="outline" onClick={() => setShowMemberFilters(!showMemberFilters)}>
+                    Filtres
+                  </Button>
                 </div>
+
+                {showMemberFilters && (
+                  <Card className="p-4">
+                    <p className="text-sm text-gray-600">(Exemple) Options de filtrage ici</p>
+                  </Card>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {topMembers.map((member) => (
@@ -337,8 +370,12 @@ const Community = () => {
                             <p className="text-gray-500">Abonnés</p>
                           </div>
                         </div>
-                        <Button className="w-full mt-4" variant="outline">
-                          Suivre
+                        <Button
+                          className="w-full mt-4"
+                          variant="outline"
+                          onClick={() => handleFollow(member.id)}
+                        >
+                          {followedMembers.includes(member.id) ? 'Suivi' : 'Suivre'}
                         </Button>
                       </CardContent>
                     </Card>
@@ -413,10 +450,12 @@ const Community = () => {
                     Partager un lieu
                   </Button>
                 </Link>
-                <Button variant="outline" className="w-full">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Créer un événement
-                </Button>
+                <Link to="/create-event" className="block">
+                  <Button variant="outline" className="w-full">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Créer un événement
+                  </Button>
+                </Link>
                 <Link to="/discover" className="block">
                   <Button variant="outline" className="w-full">
                     <Search className="w-4 h-4 mr-2" />

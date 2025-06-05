@@ -4,6 +4,7 @@ import { MapPin, Menu, X, Bell, User, Home, Compass, Users, UserCircle } from 'l
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface NavigationProps {
   transparent?: boolean;
@@ -80,21 +81,36 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               ))}
               
               {/* Notifications */}
-              <div className="relative mx-2">
-                <Button variant="ghost" size="sm" className="relative p-2 hover:bg-gray-100 rounded-xl">
-                  <Bell className="w-5 h-5 text-gray-600" />
-                  <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center p-0 rounded-full">
-                    2
-                  </Badge>
-                </Button>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative p-2 hover:bg-gray-100 rounded-xl">
+                    <Bell className="w-5 h-5 text-gray-600" />
+                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center p-0 rounded-full">
+                      2
+                    </Badge>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>Aucune nouvelle notification</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* Profile */}
-              <div className="relative mx-2">
-                <Button variant="ghost" size="sm" className="relative p-2 hover:bg-gray-100 rounded-xl">
-                  <User className="w-5 h-5 text-gray-600" />
-                </Button>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative p-2 hover:bg-gray-100 rounded-xl">
+                    <User className="w-5 h-5 text-gray-600" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">Mon profil</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings">Paramètres</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* CTA Button Enhanced */}
               <Link to="/share" className="ml-4">
@@ -124,17 +140,32 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
               </Link>
               
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" className="relative p-2 rounded-full">
-                  <Bell className="w-5 h-5 text-gray-600" />
-                  <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center p-0 rounded-full">
-                    2
-                  </Badge>
-                </Button>
-                <Link to="/profile">
-                  <Button variant="ghost" size="sm" className="p-2 rounded-full">
-                    <User className="w-5 h-5 text-gray-600" />
-                  </Button>
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="relative p-2 rounded-full">
+                      <Bell className="w-5 h-5 text-gray-600" />
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center p-0 rounded-full">2</Badge>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>Aucune notification</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="p-2 rounded-full">
+                      <User className="w-5 h-5 text-gray-600" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">Mon profil</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings">Paramètres</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
