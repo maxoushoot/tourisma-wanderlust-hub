@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { MapPin, Menu, X, Bell, User, Home, Compass, Users, UserCircle } from 'lucide-react';
+import { MapPin, Menu, X, Bell, User, Home, Compass, Users, UserCircle, List, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -31,9 +31,14 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
   const navItems = [
     { path: '/', label: 'Accueil', icon: Home },
     { path: '/discover', label: 'Découvrir', icon: Compass },
+    { path: '/itineraries', label: 'Itinéraires', icon: List },
     { path: '/community', label: 'Communauté', icon: Users },
     { path: '/profile', label: 'Profil', icon: UserCircle }
+    // Create Itinerary might be better as a separate CTA or in a dropdown menu for "Share"
   ];
+
+  const mainNavItems = navItems.filter(item => item.path !== '/itineraries' || true); // Keep all for now
+                                                                                      // but could filter some for mobile if needed
 
   return (
     <>
@@ -67,13 +72,13 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
             
             {/* Desktop Navigation Enhanced */}
             <nav className="flex items-center space-x-1">
-              {navItems.map((item) => (
-                <Link 
+              {mainNavItems.map((item) => (
+                <Link
                   key={item.path}
                   to={item.path}
                   className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
-                    isActive(item.path) 
-                      ? 'text-blue-600 bg-blue-50' 
+                    isActive(item.path)
+                      ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/50'
                   }`}
                 >
@@ -83,7 +88,7 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
                   )}
                 </Link>
               ))}
-              
+
               {/* Notifications */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -123,14 +128,23 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
                   <DropdownMenuItem asChild>
                     <Link to="/settings">Paramètres</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/create-itinerary">Créer un itinéraire</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* CTA Button Enhanced */}
-              <Link to="/share" className="ml-4">
-                <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl px-6 py-2.5 font-semibold">
+              {/* CTA Buttons */}
+              <Link to="/share" className="ml-2">
+                <Button variant="outline" className="border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 rounded-xl px-5 py-2.5 font-semibold">
                   <MapPin className="w-4 h-4 mr-2" />
-                  Partager un lieu
+                  Partager Lieu
+                </Button>
+              </Link>
+              <Link to="/create-itinerary" className="ml-2">
+                <Button className="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl px-5 py-2.5 font-semibold">
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Créer Itinéraire
                 </Button>
               </Link>
             </nav>
@@ -199,8 +213,9 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
 
         {/* Mobile Bottom Navigation */}
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
-          <div className="max-w-md mx-auto grid grid-cols-4 h-16">
-            {navItems.map((item) => {
+          {/* Adjusted grid-cols-5 for the new item */}
+          <div className="max-w-md mx-auto grid grid-cols-5 h-16">
+            {mainNavItems.map((item) => { // Use mainNavItems which includes Itinéraires
               const Icon = item.icon;
               return (
                 <Link
@@ -223,12 +238,19 @@ const Navigation: React.FC<NavigationProps> = ({ transparent = false }) => {
           </div>
         </div>
 
-        {/* Floating Action Button for Mobile */}
-        <Link to="/share" className="fixed bottom-20 right-4 z-40">
-          <Button className="w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <MapPin className="w-6 h-6 text-white" />
-          </Button>
-        </Link>
+        {/* Floating Action Buttons for Mobile */}
+        <div className="fixed bottom-20 right-4 z-40 space-y-3">
+          <Link to="/create-itinerary">
+            <Button title="Créer Itinéraire" className="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center">
+              <PlusCircle className="w-6 h-6 text-white" />
+            </Button>
+          </Link>
+          <Link to="/share">
+            <Button title="Partager un Lieu" className="w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-white" />
+            </Button>
+          </Link>
+        </div>
       </div>
     </>
   );
