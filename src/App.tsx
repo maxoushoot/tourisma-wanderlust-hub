@@ -15,6 +15,9 @@ import Profile from "./pages/Profile";
 import CreateEvent from "./pages/CreateEvent";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import CreateItineraryPage from "./pages/CreateItineraryPage";
+import ItinerariesListPage from "./pages/ItinerariesListPage";
+import ItineraryDetailPage from "./pages/ItineraryDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +38,12 @@ const App: React.FC = () => {
               <Route path="/community" element={<Community />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
+
+              {/* Itinerary Routes */}
+              <Route path="/itineraries" element={<ItinerariesListPage />} />
+              <Route path="/itinerary/:itineraryId" element={<ItineraryDetailPage />} />
+              <Route path="/create-itinerary" element={<CreateItineraryPage />} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

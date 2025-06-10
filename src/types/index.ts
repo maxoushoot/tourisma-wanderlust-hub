@@ -79,6 +79,36 @@ export interface UserActivity {
   createdAt: Date;
 }
 
+export interface PointOfInterest {
+  id: string;
+  name: string;
+  description: string;
+  location: {
+    address: string;
+    city: string;
+    country: string;
+    coordinates: {
+      lat: number;
+      lng: number;
+    };
+  };
+  images: string[];
+  order: number;
+}
+
+export interface Itinerary {
+  id: string;
+  name: string;
+  description: string;
+  city: string;
+  createdBy: User;
+  createdAt: Date;
+  pointsOfInterest: PointOfInterest[];
+  tags?: string[];
+  duration?: string;
+  category?: PlaceCategory;
+}
+
 export interface Notification {
   id: string;
   message: string;
